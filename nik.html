@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --accent: #ff6b6b;
+            --success: #4ecdc4;
+            --warning: #ffd166;
+            --light: #f5f7fa;
+            --dark: #333;
+            --gray: #666;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .login-btn {
+            background: var(--accent);
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .login-btn:hover {
+            background: #ff5252;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--gray);
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-icon {
+            font-size: 1.8rem;
+        }
+        
+        .card ul {
+            list-style: none;
+        }
+        
+        .card li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card li:last-child {
+            border-bottom: none;
+        }
+        
+        .card li i {
+            color: var(--secondary);
+        }
+        
+        .action-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+        }
+        
+        .user-roles {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .role-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            width: 200px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .role-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .role-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        
+        .admin {
+            border-top: 4px solid var(--accent);
+        }
+        
+        .driver {
+            border-top: 4px solid var(--success);
+        }
+        
+        .manager {
+            border-top: 4px solid #45b7d1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: var(--secondary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: var(--primary);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--success);
+            color: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1100;
+        }
+        
+        .notification.error {
+            background: var(--accent);
+        }
+        
+        .login-form {
+            display: none;
+        }
+        
+        .login-form.active {
+            display: block;
+        }
+        
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        
+        .user-info.active {
+            display: flex;
+        }
+        
+        .logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .user-roles {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <h1>Vehicle Management System</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="#" class="login-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <div class="user-info" id="userInfo">
+                        <span id="userName">Admin User</span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="hero">
+            <h2>Efficient Vehicle Fleet Management</h2>
+            <p>Streamline your vehicle operations with our comprehensive management system. Track, maintain, and optimize your fleet with ease.</p>
+        </section>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3><i class="fas fa-tasks card-icon"></i> Vehicle Operations</h3>
+                <ul>
+                    <li>
+                        <span><i class="fas fa-plus-circle"></i> Add Vehicle</span>
+                        <button class="action-btn" data-modal="addVehicleModal">Add</button>
+                    </li>
+                    <li>
+                        <span><i class="fas fa-map-marker-alt"></i> Track Vehicle</span>
+                        <button class="action-btn" data-modal="trackVehicleModal">Track</button>
+                    </li>
+                    <li>
+                        <span><i class="fas fa-route"></i> Update Trip</span>
+                        <button class="action-btn" data-modal="updateTripModal">Update</button>
+                    </li>
+                    <li>
+                        <span><i class="fas fa-gas-pump"></i> Monitor Fuel</span>
+                        <button class="action-btn" data-modal="monitorFuelModal">Monitor</button>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-cogs card-icon"></i> Maintenance & Service</h3>
+                <ul>
+                    <li>
+                        <span><i class="fas fa-calendar-alt"></i> Schedule Service</span>
+                        <button class="action-btn" data-modal="scheduleServiceModal">Schedule</button>
+                    </li>
+                    <li>
+                        <span><i class="fas fa-wrench"></i> Update Service</span>
+                        <button class="action-btn" data-modal="updateServiceModal">Update</button>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-users card-icon"></i> User Management</h3>
+                <ul>
+                    <li>
+                        <span><i class="fas fa-user-cog"></i> Manage User</span>
+                        <button class="action-btn" data-modal="manageUserModal">Manage</button>
+                    </li>
+                    <li>
+                        <span><i class="fas fa-chart-bar"></i> View Reports</span>
+                        <button class="action-btn" data-modal="viewReportsModal">View</button>
+                    </li>
+                    <li>
+                        <span><i class="fas fa-sign-in-alt"></i> Login</span>
+                        <button class="action-btn" id="openLoginModal">Login</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="user-roles">
+            <div class="role-card admin" data-role="admin">
+                <div class="role-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h3>Admin</h3>
+                <p>Full system access and control</p>
+            </div>
+            
+            <div class="role-card driver" data-role="driver">
+                <div class="role-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3>Driver</h3>
+                <p>Vehicle operation and trip updates</p>
+            </div>
+            
+            <div class="role-card manager" data-role="manager">
+                <div class="role-icon">
+                    <i class="fas fa-user-cog"></i>
+                </div>
+                <h3>Manager</h3>
+                <p>Oversight and reporting functions</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Vehicle Management System. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+    
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login to System</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Admin</option>
+                        <option value="driver">Driver</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Vehicle Modal -->
+    <div class="modal" id="addVehicleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Vehicle</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="addVehicleForm">
+                <div class="form-group">
+                    <label for="vehicleType">Vehicle Type</label>
+                    <select id="vehicleType" required>
+                        <option value="">Select Type</option>
+                        <option value="car">Car</option>
+                        <option value="truck">Truck</option>
+                        <option value="van">Van</option>
+                        <option value="bus">Bus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="licensePlate">License Plate</label>
+                    <input type="text" id="licensePlate" required>
+                </div>
+                <div class="form-group">
+                    <label for="make">Make</label>
+                    <input type="text" id="make" required>
+                </div>
+                <div class="form-group">
+                    <label for="model">Model</label>
+                    <input type="text" id="model" required>
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" min="2000" max="2023" required>
+                </div>
+                <button type="submit" class="submit-btn">Add Vehicle</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Track Vehicle Modal -->
+    <div class="modal" id="trackVehicleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Track Vehicle</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="trackVehicleId">Select Vehicle</label>
+                <select id="trackVehicleId">
+                    <option value="1">ABC-123 (Toyota Camry)</option>
+                    <option value="2">XYZ-789 (Ford Transit)</option>
+                    <option value="3">DEF-456 (Honda Civic)</option>
+                </select>
+            </div>
+            <div id="trackingInfo">
+                <h3>Current Location</h3>
+                <p id="vehicleLocation">Select a vehicle to track</p>
+                <h3>Status</h3>
+                <p id="vehicleStatus">-</p>
+                <h3>Last Updated</h3>
+                <p id="lastUpdate">-</p>
+            </div>
+            <button class="submit-btn" id="refreshTracking">Refresh Location</button>
+        </div>
+    </div>
+    
+    <!-- Update Trip Modal -->
+    <div class="modal" id="updateTripModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Trip Information</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="updateTripForm">
+                <div class="form-group">
+                    <label for="tripVehicle">Select Vehicle</label>
+                    <select id="tripVehicle" required>
+                        <option value="">Select Vehicle</option>
+                        <option value="1">ABC-123 (Toyota Camry)</option>
+                        <option value="2">XYZ-789 (Ford Transit)</option>
+                        <option value="3">DEF-456 (Honda Civic)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tripStart">Start Location</label>
+                    <input type="text" id="tripStart" required>
+                </div>
+                <div class="form-group">
+                    <label for="tripEnd">Destination</label>
+                    <input type="text" id="tripEnd" required>
+                </div>
+                <div class="form-group">
+                    <label for="tripDistance">Distance (km)</label>
+                    <input type="number" id="tripDistance" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="tripNotes">Notes</label>
+                    <textarea id="tripNotes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Update Trip</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Monitor Fuel Modal -->
+    <div class="modal" id="monitorFuelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Monitor Fuel Consumption</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="fuelVehicle">Select Vehicle</label>
+                <select id="fuelVehicle">
+                    <option value="1">ABC-123 (Toyota Camry)</option>
+                    <option value="2">XYZ-789 (Ford Transit)</option>
+                    <option value="3">DEF-456 (Honda Civic)</option>
+                </select>
+            </div>
+            <div id="fuelInfo">
+                <h3>Fuel Level</h3>
+                <div style="background: #f0f0f0; height: 30px; border-radius: 15px; margin: 10px 0; overflow: hidden;">
+                    <div id="fuelLevelBar" style="background: var(--success); height: 100%; width: 65%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">65%</div>
+                </div>
+                <h3>Average Consumption</h3>
+                <p id="fuelConsumption">8.5 L/100km</p>
+                <h3>Last Refuel</h3>
+                <p id="lastRefuel">2023-10-15</p>
+            </div>
+            <button class="submit-btn" id="refuelVehicle">Record Refuel</button>
+        </div>
+    </div>
+    
+    <!-- Schedule Service Modal -->
+    <div class="modal" id="scheduleServiceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Schedule Vehicle Service</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="scheduleServiceForm">
+                <div class="form-group">
+                    <label for="serviceVehicle">Select Vehicle</label>
+                    <select id="serviceVehicle" required>
+                        <option value="">Select Vehicle</option>
+                        <option value="1">ABC-123 (Toyota Camry)</option>
+                        <option value="2">XYZ-789 (Ford Transit)</option>
+                        <option value="3">DEF-456 (Honda Civic)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceType">Service Type</label>
+                    <select id="serviceType" required>
+                        <option value="">Select Service Type</option>
+                        <option value="oil">Oil Change</option>
+                        <option value="tire">Tire Rotation</option>
+                        <option value="brake">Brake Inspection</option>
+                        <option value="general">General Maintenance</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDate">Service Date</label>
+                    <input type="date" id="serviceDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceNotes">Notes</label>
+                    <textarea id="serviceNotes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Schedule Service</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Update Service Modal -->
+    <div class="modal" id="updateServiceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Service Record</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="updateServiceForm">
+                <div class="form-group">
+                    <label for="updateServiceVehicle">Select Vehicle</label>
+                    <select id="updateServiceVehicle" required>
+                        <option value="">Select Vehicle</option>
+                        <option value="1">ABC-123 (Toyota Camry)</option>
+                        <option value="2">XYZ-789 (Ford Transit)</option>
+                        <option value="3">DEF-456 (Honda Civic)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceStatus">Service Status</label>
+                    <select id="serviceStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceCost">Service Cost ($)</label>
+                    <input type="number" id="serviceCost" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="serviceMechanic">Mechanic</label>
+                    <input type="text" id="serviceMechanic">
+                </div>
+                <button type="submit" class="submit-btn">Update Service</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Manage User Modal -->
+    <div class="modal" id="manageUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Users</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="userAction">Select Action</label>
+                <select id="userAction">
+                    <option value="add">Add User</option>
+                    <option value="edit">Edit User</option>
+                    <option value="delete">Delete User</option>
+                </select>
+            </div>
+            <div id="userFormContainer">
+                <!-- User form will be loaded here based on selection -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- View Reports Modal -->
+    <div class="modal" id="viewReportsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>View Reports</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="reportType">Select Report Type</label>
+                <select id="reportType">
+                    <option value="fuel">Fuel Consumption</option>
+                    <option value="maintenance">Maintenance History</option>
+                    <option value="trips">Trip Logs</option>
+                    <option value="vehicles">Vehicle Utilization</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="reportPeriod">Select Period</label>
+                <select id="reportPeriod">
+                    <option value="week">Last Week</option>
+                    <option value="month">Last Month</option>
+                    <option value="quarter">Last Quarter</option>
+                    <option value="year">Last Year</option>
+                </select>
+            </div>
+            <button class="submit-btn" id="generateReport">Generate Report</button>
+            <div id="reportOutput" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 5px; display: none;">
+                <h3>Report Output</h3>
+                <p id="reportContent">Report will be displayed here</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userInfo = document.getElementById('userInfo');
+        const userName = document.getElementById('userName');
+        const openLoginModal = document.getElementById('openLoginModal');
+        const notification = document.getElementById('notification');
+        
+        // Modal Elements
+        const modals = document.querySelectorAll('.modal');
+        const closeButtons = document.querySelectorAll('.close-btn');
+        const actionButtons = document.querySelectorAll('.action-btn');
+        const roleCards = document.querySelectorAll('.role-card');
+        
+        // Login functionality
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loginModal').style.display = 'flex';
+        });
+        
+        openLoginModal.addEventListener('click', function() {
+            document.getElementById('loginModal').style.display = 'flex';
+        });
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const role = document.getElementById('role').value;
+            
+            if (username && role) {
+                userName.textContent = username + ' (' + role + ')';
+                userInfo.classList.add('active');
+                loginBtn.style.display = 'none';
+                showNotification('Login successful! Welcome, ' + username, 'success');
+                closeModal(document.getElementById('loginModal'));
+            } else {
+                showNotification('Please fill all fields', 'error');
+            }
+        });
+        
+        logoutBtn.addEventListener('click', function() {
+            userInfo.classList.remove('active');
+            loginBtn.style.display = 'block';
+            showNotification('You have been logged out', 'success');
+        });
+        
+        // Role selection
+        roleCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const role = this.getAttribute('data-role');
+                showNotification(`Role switched to: ${role.charAt(0).toUpperCase() + role.slice(1)}`, 'success');
+                
+                // Update active state
+                roleCards.forEach(c => c.style.opacity = '0.7');
+                this.style.opacity = '1';
+            });
+        });
+        
+        // Modal functionality
+        actionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const modalId = this.getAttribute('data-modal');
+                document.getElementById(modalId).style.display = 'flex';
+            });
+        });
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const modal = this.closest('.modal');
+                closeModal(modal);
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                closeModal(e.target);
+            }
+        });
+        
+        function closeModal(modal) {
+            modal.style.display = 'none';
+        }
+        
+        // Notification function
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = 'notification';
+            if (type === 'error') {
+                notification.classList.add('error');
+            }
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Form submissions
+        document.getElementById('addVehicleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const licensePlate = document.getElementById('licensePlate').value;
+            showNotification(`Vehicle ${licensePlate} added successfully!`, 'success');
+            closeModal(document.getElementById('addVehicleModal'));
+            this.reset();
+        });
+        
+        document.getElementById('updateTripForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Trip information updated successfully!', 'success');
+            closeModal(document.getElementById('updateTripModal'));
+            this.reset();
+        });
+        
+        document.getElementById('scheduleServiceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Service scheduled successfully!', 'success');
+            closeModal(document.getElementById('scheduleServiceModal'));
+            this.reset();
+        });
+        
+        document.getElementById('updateServiceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Service record updated successfully!', 'success');
+            closeModal(document.getElementById('updateServiceModal'));
+            this.reset();
+        });
+        
+        // Tracking functionality
+        document.getElementById('refreshTracking').addEventListener('click', function() {
+            const vehicleSelect = document.getElementById('trackVehicleId');
+            const selectedVehicle = vehicleSelect.options[vehicleSelect.selectedIndex].text;
+            
+            if (vehicleSelect.value) {
+                // Simulate tracking data
+                const locations = [
+                    "Main Office - Parking Lot A",
+                    "Highway 401, Exit 125",
+                    "Downtown Customer Site",
+                    "Service Center - Bay 3",
+                    "Warehouse District"
+                ];
+                
+                const statuses = [
+                    "In Transit",
+                    "Idle",
+                    "On Route",
+                    "In Service",
+                    "Available"
+                ];
+                
+                const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+                const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                
+                document.getElementById('vehicleLocation').textContent = randomLocation;
+                document.getElementById('vehicleStatus').textContent = randomStatus;
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+                
+                showNotification(`Tracking data updated for ${selectedVehicle}`, 'success');
+            } else {
+                showNotification('Please select a vehicle to track', 'error');
+            }
+        });
+        
+        // Fuel monitoring
+        document.getElementById('refuelVehicle').addEventListener('click', function() {
+            const fuelLevelBar = document.getElementById('fuelLevelBar');
+            fuelLevelBar.style.width = '100%';
+            fuelLevelBar.textContent = '100%';
+            document.getElementById('lastRefuel').textContent = new Date().toLocaleDateString();
+            showNotification('Refuel recorded successfully!', 'success');
+        });
+        
+        // Report generation
+        document.getElementById('generateReport').addEventListener('click', function() {
+            const reportType = document.getElementById('reportType').value;
+            const reportPeriod = document.getElementById('reportPeriod').value;
+            
+            const reportTitles = {
+                fuel: 'Fuel Consumption Report',
+                maintenance: 'Maintenance History Report',
+                trips: 'Trip Logs Report',
+                vehicles: 'Vehicle Utilization Report'
+            };
+            
+            const reportContent = {
+                fuel: `Fuel consumption analysis for the last ${reportPeriod}. Average consumption: 8.7 L/100km. Total fuel cost: $1,250.`,
+                maintenance: `Maintenance history for the last ${reportPeriod}. 12 services performed. Total cost: $3,450.`,
+                trips: `Trip logs for the last ${reportPeriod}. Total distance: 2,450 km. Average trip duration: 45 minutes.`,
+                vehicles: `Vehicle utilization for the last ${reportPeriod}. Overall utilization rate: 78%. Most active vehicle: ABC-123.`
+            };
+            
+            document.getElementById('reportContent').textContent = reportContent[reportType];
+            document.getElementById('reportOutput').style.display = 'block';
+            showNotification(`${reportTitles[reportType]} generated successfully!`, 'success');
+        });
+        
+        // User management
+        document.getElementById('userAction').addEventListener('change', function() {
+            const action = this.value;
+            const formContainer = document.getElementById('userFormContainer');
+            
+            let formHTML = '';
+            
+            if (action === 'add') {
+                formHTML = `
+                    <h3>Add New User</h3>
+                    <form id="addUserForm">
+                        <div class="form-group">
+                            <label for="newUserName">Full Name</label>
+                            <input type="text" id="newUserName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newUserEmail">Email</label>
+                            <input type="email" id="newUserEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newUserRole">Role</label>
+                            <select id="newUserRole" required>
+                                <option value="">Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="driver">Driver</option>
+                                <option value="manager">Manager</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn">Add User</button>
+                    </form>
+                `;
+            } else if (action === 'edit') {
+                formHTML = `
+                    <h3>Edit User</h3>
+                    <form id="editUserForm">
+                        <div class="form-group">
+                            <label for="editUser">Select User</label>
+                            <select id="editUser" required>
+                                <option value="">Select User</option>
+                                <option value="1">John Smith (Driver)</option>
+                                <option value="2">Sarah Johnson (Admin)</option>
+                                <option value="3">Mike Wilson (Manager)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editUserRole">New Role</label>
+                            <select id="editUserRole" required>
+                                <option value="">Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="driver">Driver</option>
+                                <option value="manager">Manager</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn">Update User</button>
+                    </form>
+                `;
+            } else if (action === 'delete') {
+                formHTML = `
+                    <h3>Delete User</h3>
+                    <form id="deleteUserForm">
+                        <div class="form-group">
+                            <label for="deleteUser">Select User</label>
+                            <select id="deleteUser" required>
+                                <option value="">Select User</option>
+                                <option value="1">John Smith (Driver)</option>
+                                <option value="2">Sarah Johnson (Admin)</option>
+                                <option value="3">Mike Wilson (Manager)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn" style="background: var(--accent);">Delete User</button>
+                    </form>
+                `;
+            }
+            
+            formContainer.innerHTML = formHTML;
+            
+            // Add event listeners for dynamically created forms
+            if (action === 'add') {
+                document.getElementById('addUserForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('User added successfully!', 'success');
+                });
+            } else if (action === 'edit') {
+                document.getElementById('editUserForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('User updated successfully!', 'success');
+                });
+            } else if (action === 'delete') {
+                document.getElementById('deleteUserForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('User deleted successfully!', 'success');
+                });
+            }
+        });
+        
+        // Initialize user management form
+        document.getElementById('userAction').dispatchEvent(new Event('change'));
+    </script>
+</body>
+</html>
